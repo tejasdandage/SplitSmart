@@ -29,6 +29,7 @@ interface ExpenseStore {
   updateExpense: (expense: Expense) => void;
   removeExpense: (id: string) => void;
   settleDebt: (fromFriendId: string, toFriendId: string, amount: number) => void;
+  recalculateBalances: () => void;
 }
 
 export const useExpenseStore = create<ExpenseStore>()(
