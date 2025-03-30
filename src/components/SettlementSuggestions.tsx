@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { 
   ArrowRight, 
   CheckCircle2,
-  DollarSign
+  DollarSign,
+  CreditCard
 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -23,8 +24,9 @@ const SettlementSuggestions = () => {
   
   if (settlementSuggestions.length === 0) {
     return (
-      <div className="p-6 text-center">
-        <p className="text-muted-foreground">No settlements needed at this time.</p>
+      <div className="p-6 text-center rounded-lg border-2 border-dashed border-muted">
+        <CreditCard className="h-12 w-12 text-muted-foreground mx-auto mb-3" />
+        <p className="text-muted-foreground font-medium">All settled up! No payments needed at this time.</p>
       </div>
     );
   }
@@ -56,7 +58,7 @@ const SettlementSuggestions = () => {
   };
   
   return (
-    <div className="space-y-3">
+    <div className="space-y-4">
       {settlementSuggestions.map((suggestion, index) => {
         const { fromFriendId, toFriendId, amount } = suggestion;
         const isSettling = settlingIndex === index;
@@ -75,58 +77,70 @@ const SettlementSuggestions = () => {
         return (
           <div 
             key={`${fromFriendId}-${toFriendId}-${index}`}
-            className="bg-card rounded-lg p-4 border shadow-sm"
+            className={`rounded-lg p-5 border shadow-sm transition-all ${
+              isSettling ? "bg-primary/5 border-primary/20" : "bg-card hover:shadow"
+            }`}
           >
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-3">
-                <UserAvatar friend={fromPerson} />
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+              <div className="flex items-center gap-3 w-full sm:w-auto">
+                <div className="relative">
+                  <UserAvatar friend={fromPerson} className="border-2 border-background" />
+                  <div className="absolute -bottom-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+                    -
+                  </div>
+                </div>
                 <div className="flex flex-col">
-                  <span className="font-medium">
+                  <span className="font-semibold">
                     {isYouFrom ? "You" : fromPerson.name}
                   </span>
                   <span className="text-xs text-muted-foreground">
-                    should pay
+                    needs to pay
                   </span>
                 </div>
               </div>
               
-              <div className="flex items-center">
-                <ArrowRight className="h-5 w-5 text-muted-foreground mx-2" />
-                <div className="px-3 py-1 bg-primary/10 rounded-full text-primary font-medium">
+              <div className="flex flex-col sm:flex-row items-center">
+                <ArrowRight className="h-5 w-5 text-muted-foreground hidden sm:block mx-3" />
+                <div className="px-4 py-2 bg-primary/10 rounded-full text-primary font-medium text-center">
                   {formatCurrency(amount)}
                 </div>
-                <ArrowRight className="h-5 w-5 text-muted-foreground mx-2" />
+                <ArrowRight className="h-5 w-5 text-muted-foreground hidden sm:block mx-3" />
               </div>
               
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-3 w-full sm:w-auto justify-end">
                 <div className="flex flex-col items-end">
-                  <span className="font-medium">
+                  <span className="font-semibold">
                     {isYouTo ? "You" : toPerson.name}
                   </span>
                   <span className="text-xs text-muted-foreground">
-                    to settle up
+                    will receive
                   </span>
                 </div>
-                <UserAvatar friend={toPerson} />
+                <div className="relative">
+                  <UserAvatar friend={toPerson} className="border-2 border-background" />
+                  <div className="absolute -bottom-1 -right-1 bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
+                    +
+                  </div>
+                </div>
               </div>
             </div>
             
-            <div className="mt-3 flex justify-end">
+            <div className="mt-4 flex justify-end">
               <Button
-                variant="outline"
+                variant={isSettling ? "default" : "outline"}
                 size="sm"
                 onClick={() => handleSettle(index)}
                 disabled={isSettling}
-                className={isSettling ? "bg-green-500 text-white" : ""}
+                className={`transition-all ${isSettling ? "bg-green-500 hover:bg-green-600 text-white" : ""}`}
               >
                 {isSettling ? (
                   <>
-                    <CheckCircle2 className="h-4 w-4 mr-1" />
+                    <CheckCircle2 className="h-4 w-4 mr-2" />
                     Recorded
                   </>
                 ) : (
                   <>
-                    <DollarSign className="h-4 w-4 mr-1" />
+                    <DollarSign className="h-4 w-4 mr-2" />
                     Record Payment
                   </>
                 )}
