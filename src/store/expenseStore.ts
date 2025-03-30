@@ -32,6 +32,77 @@ interface ExpenseStore {
   recalculateBalances: () => void;
 }
 
+// Sample expense data
+const sampleExpenses: Omit<Expense, 'id'>[] = [
+  {
+    title: 'Dinner at Italian Restaurant',
+    description: 'Friday night dinner with everyone',
+    totalAmount: 120.50,
+    date: new Date(2023, 9, 15), // October 15, 2023
+    paidBy: 'current-user',
+    category: 'Food & Drink',
+    splits: [
+      { friendId: 'current-user', amount: 30.10, paid: true },
+      { friendId: 'friend-1', amount: 30.15, paid: false },
+      { friendId: 'friend-2', amount: 30.15, paid: false },
+      { friendId: 'friend-3', amount: 30.10, paid: false },
+    ],
+  },
+  {
+    title: 'Uber Ride',
+    description: 'Ride to the concert',
+    totalAmount: 45.75,
+    date: new Date(2023, 9, 20), // October 20, 2023
+    paidBy: 'friend-1',
+    category: 'Transportation',
+    splits: [
+      { friendId: 'current-user', amount: 15.25, paid: false },
+      { friendId: 'friend-1', amount: 15.25, paid: true },
+      { friendId: 'friend-2', amount: 15.25, paid: false },
+    ],
+  },
+  {
+    title: 'Movie Tickets',
+    description: 'Avengers: Endgame',
+    totalAmount: 60.00,
+    date: new Date(2023, 10, 5), // November 5, 2023
+    paidBy: 'friend-2',
+    category: 'Entertainment',
+    splits: [
+      { friendId: 'current-user', amount: 15.00, paid: false },
+      { friendId: 'friend-1', amount: 15.00, paid: false },
+      { friendId: 'friend-2', amount: 15.00, paid: true },
+      { friendId: 'friend-3', amount: 15.00, paid: false },
+    ],
+  },
+  {
+    title: 'Groceries',
+    description: 'Weekly groceries for shared apartment',
+    totalAmount: 89.32,
+    date: new Date(2023, 10, 12), // November 12, 2023
+    paidBy: 'current-user',
+    category: 'Shopping',
+    splits: [
+      { friendId: 'current-user', amount: 44.66, paid: true },
+      { friendId: 'friend-3', amount: 44.66, paid: false },
+    ],
+  },
+  {
+    title: 'Weekend Trip Airbnb',
+    description: 'Beach house rental for the weekend',
+    totalAmount: 320.00,
+    date: new Date(2023, 11, 2), // December 2, 2023
+    paidBy: 'friend-3',
+    category: 'Travel',
+    splits: [
+      { friendId: 'current-user', amount: 80.00, paid: false },
+      { friendId: 'friend-1', amount: 80.00, paid: false },
+      { friendId: 'friend-2', amount: 80.00, paid: false },
+      { friendId: 'friend-3', amount: 80.00, paid: true },
+    ],
+  },
+];
+
 export const useExpenseStore = create<ExpenseStore>()(
   persist(
     (set, get) => ({
@@ -47,7 +118,10 @@ export const useExpenseStore = create<ExpenseStore>()(
         { id: 'friend-2', name: 'Taylor' },
         { id: 'friend-3', name: 'Jordan' },
       ],
-      expenses: [],
+      expenses: sampleExpenses.map(expense => ({
+        ...expense,
+        id: `expense-${generateId()}`,
+      })),
       
       // Computed values (will be calculated in the set functions)
       balances: [],
@@ -157,6 +231,12 @@ export const useExpenseStore = create<ExpenseStore>()(
     }),
     {
       name: 'expense-store',
+      onRehydrateStorage: () => (state) => {
+        if (state) {
+          // Call recalculateBalances when the store is rehydrated
+          state.recalculateBalances();
+        }
+      },
     }
   )
 );
