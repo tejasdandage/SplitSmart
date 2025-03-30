@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 import { useExpenseStore } from "@/store/expenseStore";
 import AddExpenseForm from "@/components/AddExpenseForm";
@@ -7,34 +6,13 @@ import ExpenseList from "@/components/ExpenseList";
 import FriendsManagement from "@/components/FriendsManagement";
 import SettlementSuggestions from "@/components/SettlementSuggestions";
 import { Button } from "@/components/ui/button";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import {
-  Calculator,
-  CreditCard,
-  DollarSign,
-  LayoutDashboard,
-  Receipt,
-  Users,
-} from "lucide-react";
-
+import { Calculator, CreditCard, DollarSign, LayoutDashboard, Receipt, Users } from "lucide-react";
 const Index = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
-  
-  return (
-    <div className="min-h-screen bg-background">
+  return <div className="min-h-screen bg-background">
       <header className="border-b bg-card py-4">
         <div className="container flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -81,16 +59,12 @@ const Index = () => {
                           <CardTitle>Recent Expenses</CardTitle>
                           <CardDescription>Your latest transactions</CardDescription>
                         </div>
-                        <Button 
-                          variant="ghost" 
-                          onClick={() => setActiveTab("expenses")}
-                          className="text-primary hover:text-primary"
-                        >
+                        <Button variant="ghost" onClick={() => setActiveTab("expenses")} className="text-primary hover:text-primary">
                           View All
                         </Button>
                       </div>
                     </CardHeader>
-                    <CardContent>
+                    <CardContent className="mx-0">
                       <ExpenseList />
                     </CardContent>
                   </Card>
@@ -104,11 +78,7 @@ const Index = () => {
                           <CardTitle>Settlement</CardTitle>
                           <CardDescription>Suggested payments</CardDescription>
                         </div>
-                        <Button 
-                          variant="ghost" 
-                          onClick={() => setActiveTab("settle")}
-                          className="text-primary hover:text-primary"
-                        >
+                        <Button variant="ghost" onClick={() => setActiveTab("settle")} className="text-primary hover:text-primary">
                           View All
                         </Button>
                       </div>
@@ -183,8 +153,6 @@ const Index = () => {
           </TabsContent>
         </Tabs>
       </main>
-    </div>
-  );
+    </div>;
 };
-
 export default Index;
