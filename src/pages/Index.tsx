@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useExpenseStore } from "@/store/expenseStore";
 import AddExpenseForm from "@/components/AddExpenseForm";
@@ -10,6 +11,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Calculator, CreditCard, DollarSign, LayoutDashboard, Receipt, Users } from "lucide-react";
+import { ResizablePanelGroup, ResizablePanel, ResizableHandle } from "@/components/ui/resizable";
+
 const Index = () => {
   const [activeTab, setActiveTab] = useState("dashboard");
   return <div className="min-h-screen bg-background">
@@ -50,46 +53,52 @@ const Index = () => {
             <div className="animate-fade-in">
               <BalanceSummary />
               
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="md:col-span-2">
-                  <Card>
-                    <CardHeader className="pb-3">
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <CardTitle>Recent Expenses</CardTitle>
-                          <CardDescription>Your latest transactions</CardDescription>
+              <div className="mt-6">
+                <ResizablePanelGroup direction="horizontal" className="min-h-[500px] rounded-lg border">
+                  <ResizablePanel defaultSize={50}>
+                    <div className="flex h-full flex-col">
+                      <div className="border-b p-4 bg-card">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <h3 className="text-lg font-medium">Recent Expenses</h3>
+                            <p className="text-sm text-muted-foreground">Your latest transactions</p>
+                          </div>
+                          <Button variant="ghost" onClick={() => setActiveTab("expenses")} className="text-primary hover:text-primary">
+                            View All
+                          </Button>
                         </div>
-                        <Button variant="ghost" onClick={() => setActiveTab("expenses")} className="text-primary hover:text-primary">
-                          View All
-                        </Button>
                       </div>
-                    </CardHeader>
-                    <CardContent className="mx-0">
-                      <ExpenseList />
-                    </CardContent>
-                  </Card>
-                </div>
-                
-                <div>
-                  <Card className="mb-6">
-                    <CardHeader className="pb-3">
-                      <div className="flex justify-between items-center">
-                        <div>
-                          <CardTitle>Settlement</CardTitle>
-                          <CardDescription>Suggested payments</CardDescription>
-                        </div>
-                        <Button variant="ghost" onClick={() => setActiveTab("settle")} className="text-primary hover:text-primary">
-                          View All
-                        </Button>
+                      <div className="p-4 flex-1 overflow-auto">
+                        <ExpenseList />
                       </div>
-                    </CardHeader>
-                    <CardContent>
-                      <SettlementSuggestions />
-                    </CardContent>
-                  </Card>
+                    </div>
+                  </ResizablePanel>
                   
-                  <FriendsManagement />
-                </div>
+                  <ResizableHandle withHandle />
+                  
+                  <ResizablePanel defaultSize={50}>
+                    <div className="flex h-full flex-col">
+                      <div className="border-b p-4 bg-card">
+                        <div className="flex justify-between items-center">
+                          <div>
+                            <h3 className="text-lg font-medium">Settlement</h3>
+                            <p className="text-sm text-muted-foreground">Suggested payments</p>
+                          </div>
+                          <Button variant="ghost" onClick={() => setActiveTab("settle")} className="text-primary hover:text-primary">
+                            View All
+                          </Button>
+                        </div>
+                      </div>
+                      <div className="p-4 flex-1 overflow-auto">
+                        <SettlementSuggestions />
+                      </div>
+                    </div>
+                  </ResizablePanel>
+                </ResizablePanelGroup>
+              </div>
+              
+              <div className="mt-6">
+                <FriendsManagement />
               </div>
             </div>
           </TabsContent>

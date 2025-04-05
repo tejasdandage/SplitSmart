@@ -84,7 +84,9 @@ const SettlementSuggestions = () => {
             <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="flex items-center gap-3 w-full sm:w-auto">
                 <div className="relative">
-                  <UserAvatar friend={fromPerson} className="border-2 border-background" />
+                  <div className="border-2 border-background">
+                    <UserAvatar friend={fromPerson} />
+                  </div>
                   <div className="absolute -bottom-1 -right-1 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
                     -
                   </div>
@@ -117,7 +119,9 @@ const SettlementSuggestions = () => {
                   </span>
                 </div>
                 <div className="relative">
-                  <UserAvatar friend={toPerson} className="border-2 border-background" />
+                  <div className="border-2 border-background">
+                    <UserAvatar friend={toPerson} />
+                  </div>
                   <div className="absolute -bottom-1 -right-1 bg-green-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold">
                     +
                   </div>
